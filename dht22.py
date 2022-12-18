@@ -1,5 +1,4 @@
 import adafruit_dht
-import time
 import board
 
 dht_device = adafruit_dht.DHT22(board.D4,use_pulseio=False)
@@ -12,4 +11,3 @@ def dht22():
         return error.args[0]
 
     return f"temperatura = {temperature}, humidade = {humidity}"
-    
