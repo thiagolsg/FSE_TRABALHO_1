@@ -11,5 +11,5 @@ def dht22():
     except RuntimeError as error:
         return error.args[0]
 
-    return f"temperatura = {temperature}, humidade = {humidity}"
+    return f"Temperatura = {temperature} ºC, Humidade = {humidity}%"
     

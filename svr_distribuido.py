@@ -38,4 +38,3 @@ while True:
     elif mensagem_recebida == '7':       
         envia_mensagem = desligar_cargas()
         svr_distribuido.sendall(envia_mensagem.encode())
-    

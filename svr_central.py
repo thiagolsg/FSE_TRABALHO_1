@@ -12,8 +12,6 @@ svr_central.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #teste
 svr_central.bind((ip_central, porta_central))
 svr_central.listen(5)
 
-print(f'Servidor Central:  {ip_central} e Porta: {porta_central}')
-
 lista_svr_distribuido = []
 svr_distribuido_conexao = ''
 
@@ -61,7 +59,7 @@ while True:
     for sala in lista_svr_distribuido: print(sala['sala']+' esta conectada')
     print('=================================================')
     
-    entrada_usuario = str(input('VER DISPOSITIVOS DE ENTRADA (1)\nVER DISPOSITIVOS DE SAÍDA (2)\nVER VALORES DE TEMPERATURA E UMIDADE (3)\nACIONAR DISPOSITIVOS (4)\nPESSOAS NA SALA (5)\nLIGAR TODAS AS LAMPADAS (6)\nDESLIGAR TODAS AS CARGAS (7)\n'))
+    entrada_usuario = str(input('VER DISPOSITIVOS DE SAÍDA (1)\nVER DISPOSITIVOS DE ENTRADA (2)\nVER VALORES DE TEMPERATURA E UMIDADE (3)\nLIGAR/DESLIGAR DISPOSITIVOS (4)\nPESSOAS NA SALA (5)\nLIGAR TODAS AS LAMPADAS (6)\nDESLIGAR TODAS AS CARGAS (7)\n'))
 
     if entrada_usuario != '4' and entrada_usuario != '6' and entrada_usuario != '7':
         svr_distribuido_conexao = escolhe_conexao_log()
@@ -82,22 +80,36 @@ while True:
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
 
-        pino = str(input("\nDigite o dispositivo que deseja alterar o estado, Lampada 01 = 1, Lampada 02 = 2, Projetor = 3, Ar-Condicionado = 4\n"))
+        pino = str(input("Digite o dispositivo que deseja alterar o estado, Lampada 01 = 1, Lampada 02 = 2, Projetor = 3, Ar-Condicionado = 4\n"))
 
         svr_distribuido_conexao.sendall(pino.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
+
+        limpa_tela = str(input("\nDigite qualquer tecla para limpar a tela e voltar para o menu\n"))
+
+        if limpa_tela:
+            os.system('clear')
     
     elif entrada_usuario == '6':
 
         svr_distribuido_conexao = escolhe_conexao_log('3')
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
+
+        limpa_tela = str(input("\nDigite qualquer tecla para limpar a tela e voltar para o menu\n"))
+
+        if limpa_tela:
+            os.system('clear')
     
     elif entrada_usuario == '7':
        
         svr_distribuido_conexao = escolhe_conexao_log('4')
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
-             
+
+        limpa_tela = str(input("\nDigite qualquer tecla para limpar a tela e voltar para o menu\n"))
+
+        if limpa_tela:
+            os.system('clear')  
 
 svr_distribuido.close()

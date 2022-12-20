@@ -8,16 +8,16 @@ lista_in = setup_in()
 def status_out():
     string = ''
     for i in range(len(lista_out)):
-        status = "ligado" if GPIO.input(lista_out[i]['pino']) == 1 else "desligado"
-        string += f"{lista_out[i]['dispositivo']} esta {status}" + ',' + ' '
-    return string[:-2]    
+        status = "ON" if GPIO.input(lista_out[i]['pino']) == 1 else "OFF"
+        string += f"{lista_out[i]['dispositivo']} {status}\n"  
+    return string   
 
 def status_in():
     string = ''
     for i in range(len(lista_in)):
-        status = "ligado" if GPIO.input(lista_in[i]['pino']) == 1 else "desligado"
-        string += f"{lista_in[i]['dispositivo']} esta {status}" + ',' + ' '
-    return string[:-2]
+        status = "ON" if GPIO.input(lista_in[i]['pino']) == 1 else "OFF"
+        string += f"{lista_in[i]['dispositivo']} {status}\n"
+    return string
 
 def contagem_pessoas(contagem = 0):
     gpio_entrada = ''
