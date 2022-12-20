@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import json
 
 
-with open("configuracao_sala_03.json", encoding='utf-8') as meu_json:
+with open("configuracao_sala_04.json", encoding='utf-8') as meu_json:
     config_pinos = json.load(meu_json)
 
 ip_central = config_pinos["ip_servidor_central"]
@@ -22,10 +22,12 @@ def setup_out():
         list_dict.append({'dispositivo': gpios['tag'], 'pino': gpios['gpio']})
     return list_dict
 
-
 def setup_in():
     list_dict = []
     for gpios in config_pinos['inputs']:
         GPIO.setup(gpios['gpio'], GPIO.IN)
         list_dict.append({'dispositivo': gpios['tag'], 'pino': gpios['gpio']})
+    GPIO.add_event_detect(config_pinos['inputs'][4]['gpio'], GPIO.RISING)
+    GPIO.add_event_detect(config_pinos['inputs'][5]['gpio'], GPIO.RISING)
     return list_dict
+

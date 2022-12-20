@@ -18,3 +18,29 @@ def status_in():
         status = "ligado" if GPIO.input(lista_in[i]['pino']) == 1 else "desligado"
         string += f"{lista_in[i]['dispositivo']} esta {status}" + ',' + ' '
     return string[:-2]
+
+def contagem_pessoas():
+    gpio_entrada = ''
+    gpio_saida = ''
+    contagem = 0
+    
+    for sensor in lista_in:
+        if sensor['dispositivo'] == 'Sensor de Contagem de Pessoas Entrada':
+            gpio_entrada = int(sensor['pino'])
+        if sensor['dispositivo'] == 'Sensor de Contagem de Pessoas Saída':
+            gpio_saida = int(sensor['pino'])
+
+    time.sleep(0.0001)
+    if GPIO.event_detected(gpio_entrada):
+        contagem = contagem + 1
+    if GPIO.event_detected(gpio_saida):
+        contagem = contagem - 1
+        if contagem < 0:
+            contagem = 0
+
+    return f'Quantidade de pessoas na sala {contagem}'
+
+print(status_out())
+print(lista_out)
+# GPIO.setup(0, GPIO.OUT)
+# GPIO.output(0,GPIO.HIGH)
