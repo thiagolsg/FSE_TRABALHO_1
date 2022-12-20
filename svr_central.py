@@ -1,6 +1,6 @@
 from socket import *
 import os
-from configuracao import ip_central,porta_central,ip_distribuido,porta_distribuido,nome_sala
+from configuracao import ip_central,porta_central
 import time
 import csv
 from datetime import datetime
@@ -27,20 +27,33 @@ def recebe_conexao():
     except RuntimeError as error:
         return error.args[0]
 
-def recebe_contagem():
-    try:
-        while True:
-            quantidade = svr_distribuido.recv(1024).decode()
-            if quantidade[0] == 'Q':
-                # nome_sala = svr_distribuido.recv(1024).decode()
-                # lista_svr_distribuido.append({'conexao':svr_distribuido,'sala': nome_sala})
-                print(f'{quantidade}')
-    except RuntimeError as error:
-        return error.args[0]
-
 threading.Thread(target=recebe_conexao, ).start()
 
-#threading.Thread(target=recebe_contagem, ).start()
+def escolhe_conexao_log(escolhe_evento = '1'):
+    os.system('clear')
+
+    for sala in lista_svr_distribuido: print(sala['sala'])
+    numero_sala = str(input('Digite o número da sala que deseja\n'))
+
+    with open('log.csv','a') as csvfile:
+
+        if escolhe_evento == '1':
+            evento = f'Visualizando Dispositivos de Entrada Sala {numero_sala}' if entrada_usuario == '1' else f'Visualizando Dispositivos de Saída Sala {numero_sala}' if entrada_usuario == '2' else f'Visualizando Temperatura e Humidade Sala {numero_sala}' if entrada_usuario == '3'  else f'Visualizando Contagem de Pessoas Sala {numero_sala}' 
+        if escolhe_evento == '2':
+            evento = f'Ligando/Desligando Dispositivos Sala {numero_sala}'
+        if escolhe_evento == '3':
+            evento = f'Ligando todas as Lampadas Sala {numero_sala}' 
+        if escolhe_evento == '4':
+            evento = f'Desligando todas as Cargas Sala {numero_sala}'
+
+        writer = csv.writer(csvfile,delimiter = ',')
+        print(datetime.now().strftime('%d/%m/%Y %H:%M')+',',evento,file = csvfile)
+            
+    for sala in lista_svr_distribuido:
+        if sala['sala'][-1] == numero_sala:
+            svr_distribuido_conexao = sala['conexao']
+    
+    return svr_distribuido_conexao
 
 while True:
     print('====================================================')
@@ -51,20 +64,7 @@ while True:
     entrada_usuario = str(input('VER DISPOSITIVOS DE ENTRADA (1)\nVER DISPOSITIVOS DE SAÍDA (2)\nVER VALORES DE TEMPERATURA E UMIDADE (3)\nACIONAR DISPOSITIVOS (4)\nPESSOAS NA SALA (5)\nLIGAR TODAS AS LAMPADAS (6)\nDESLIGAR TODAS AS CARGAS (7)\n'))
 
     if entrada_usuario != '4' and entrada_usuario != '6' and entrada_usuario != '7':
-       
-        os.system('clear')
-
-        for sala in lista_svr_distribuido: print(sala['sala'])
-        numero_sala = str(input('Digite o número da sala que deseja\n'))
-
-        with open('log.csv','a') as csvfile:
-            evento = f'Visualizando Dispositivos de Entrada Sala {numero_sala}' if entrada_usuario == '1' else f'Visualizando Dispositivos de Saída Sala {numero_sala}' if entrada_usuario == '2' else f'Visualizando Temperatura e Humidade Sala {numero_sala}' if entrada_usuario == '3'  else f'Visualizando Contagem de Pessoas Sala {numero_sala}' 
-            writer = csv.writer(csvfile,delimiter = ',')
-            print(datetime.now().strftime('%d/%m/%Y %H:%M')+',',evento,file = csvfile)
-            
-        for sala in lista_svr_distribuido:
-            if sala['sala'][-1] == numero_sala:
-                svr_distribuido_conexao = sala['conexao']
+        svr_distribuido_conexao = escolhe_conexao_log()
 
         try:
             while True:
@@ -75,22 +75,10 @@ while True:
         except KeyboardInterrupt:
             os.system('clear')
             continue
+
     elif entrada_usuario == '4':
-        
-        os.system('clear')
 
-        for sala in lista_svr_distribuido: print(sala['sala'])
-        numero_sala = str(input('Digite o número da sala que deseja\n'))
-
-        with open('log.csv','a') as csvfile:
-            evento = f'Acionando Dispositivos Sala {numero_sala}' 
-            writer = csv.writer(csvfile,delimiter = ',')
-            print(datetime.now().strftime('%d/%m/%Y %H:%M')+',',evento,file = csvfile)
-            
-        for sala in lista_svr_distribuido:
-            if sala['sala'][-1] == numero_sala:
-                svr_distribuido_conexao = sala['conexao']
-
+        svr_distribuido_conexao = escolhe_conexao_log('2')
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
 
@@ -100,42 +88,16 @@ while True:
         print(svr_distribuido_conexao.recv(1024).decode())
     
     elif entrada_usuario == '6':
-        
-        os.system('clear')
 
-        for sala in lista_svr_distribuido: print(sala['sala'])
-        numero_sala = str(input('Digite o número da sala que deseja\n'))
-
-        with open('log.csv','a') as csvfile:
-            evento = f'Acionando Dispositivos Sala {numero_sala}' 
-            writer = csv.writer(csvfile,delimiter = ',')
-            print(datetime.now().strftime('%d/%m/%Y %H:%M')+',',evento,file = csvfile)
-            
-        for sala in lista_svr_distribuido:
-            if sala['sala'][-1] == numero_sala:
-                svr_distribuido_conexao = sala['conexao']
-
+        svr_distribuido_conexao = escolhe_conexao_log('3')
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
     
     elif entrada_usuario == '7':
-        
-        os.system('clear')
-
-        for sala in lista_svr_distribuido: print(sala['sala'])
-        numero_sala = str(input('Digite o número da sala que deseja\n'))
-
-        with open('log.csv','a') as csvfile:
-            evento = f'Acionando Dispositivos Sala {numero_sala}' 
-            writer = csv.writer(csvfile,delimiter = ',')
-            print(datetime.now().strftime('%d/%m/%Y %H:%M')+',',evento,file = csvfile)
-            
-        for sala in lista_svr_distribuido:
-            if sala['sala'][-1] == numero_sala:
-                svr_distribuido_conexao = sala['conexao']
-
+       
+        svr_distribuido_conexao = escolhe_conexao_log('4')
         svr_distribuido_conexao.send(entrada_usuario.encode())
         print(svr_distribuido_conexao.recv(1024).decode())
              
-                
+
 svr_distribuido.close()

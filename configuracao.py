@@ -11,6 +11,7 @@ porta_central = config_pinos["porta_servidor_central"]
 ip_distribuido = config_pinos["ip_servidor_distribuido"]
 porta_distribuido = config_pinos["porta_servidor_distribuido"]
 nome_sala = config_pinos['nome']
+dht22 = config_pinos["sensor_temperatura"]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)

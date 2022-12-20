@@ -1,7 +1,8 @@
 import adafruit_dht
 import board
+from configuracao import dht22
 
-dht_device = adafruit_dht.DHT22(board.D4,use_pulseio=False)
+dht_device = adafruit_dht.DHT22(board.D18 if dht22[0]['gpio'] == 18 else board.D4,use_pulseio=False)
 
 def dht22():
     try:
@@ -11,3 +12,4 @@ def dht22():
         return error.args[0]
 
     return f"temperatura = {temperature}, humidade = {humidity}"
+    

@@ -1,9 +1,8 @@
 import RPi.GPIO as GPIO
 from configuracao import setup_out,setup_in
-import time
 
 lista_out = setup_out()
-# print(lista_out)
+
 def altera_estado(pino):
     dispositivo = ''
     if pino == 1:
@@ -25,6 +24,7 @@ def altera_estado(pino):
 
         estado = 'ligado' if GPIO.input(pino) else 'desligado'
         return f'Dispositivo {dispositivo} esta {estado}'
+
     except RuntimeError as error:
         return error.args[0]
 
@@ -34,6 +34,7 @@ def ligar_lampadas():
         GPIO.output(lista_out[1]['pino'],GPIO.HIGH)
 
         return f'Lampadas da Sala ligadas'
+
     except RuntimeError as error:
         return error.args[0]
 
@@ -45,7 +46,6 @@ def desligar_cargas():
         GPIO.output(lista_out[3]['pino'],GPIO.LOW)
         
         return f'Cargas da Sala desligadas'
+        
     except RuntimeError as error:
         return error.args[0]
-
-#altera_estado(26)

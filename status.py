@@ -19,11 +19,10 @@ def status_in():
         string += f"{lista_in[i]['dispositivo']} esta {status}" + ',' + ' '
     return string[:-2]
 
-def contagem_pessoas():
+def contagem_pessoas(contagem = 0):
     gpio_entrada = ''
     gpio_saida = ''
-    contagem = 0
-    
+
     for sensor in lista_in:
         if sensor['dispositivo'] == 'Sensor de Contagem de Pessoas Entrada':
             gpio_entrada = int(sensor['pino'])
@@ -39,8 +38,4 @@ def contagem_pessoas():
             contagem = 0
 
     return f'Quantidade de pessoas na sala {contagem}'
-
-print(status_out())
-print(lista_out)
-# GPIO.setup(0, GPIO.OUT)
-# GPIO.output(0,GPIO.HIGH)
+   
