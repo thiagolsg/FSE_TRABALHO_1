@@ -2,7 +2,7 @@
 
 Trabalho 1 da disciplina de Fundamentos de Sistemas Embarcados (2022/2)
 
-LAluno: Thiago Luiz de Souza Gomes 
+Aluno: Thiago Luiz de Souza Gomes 
 Matrícula: 180028324
 
 ## Descrição
